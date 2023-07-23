@@ -1,4 +1,5 @@
 src/main/resources/database_properties
+src/main/resources/hibernate.properties
 
 target/
 !.mvn/wrapper/maven-wrapper.jar

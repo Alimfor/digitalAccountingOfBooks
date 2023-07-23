@@ -2,32 +2,41 @@ package com.gaziyev.spring.models;
 
 import com.gaziyev.spring.annotations.IAnnotations.MaxCurrentYear;
 import com.gaziyev.spring.annotations.IAnnotations.MinYear;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
+@Entity
+@Table(name = "book")
 public class Book {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Column(name = "name")
     @NotEmpty(message = "Не забудьте указать название книги")
     private String name;
 
+    @Column(name = "author")
     @NotEmpty(message = "Не забудьте указать имя автора")
     @Size(min = 2, max = 30, message = "Имя автора не дожно быть меньше 2, и больше 30 букв!")
     private String author;
 
-    @MaxCurrentYear()
-    @MinYear()
+    @MaxCurrentYear
+    @Column(name = "year")
     private int year;
-    private int personId;
+
+    @ManyToOne
+    @JoinColumn(name = "personId",referencedColumnName = "id")
+    private Person person;
+
     public Book() {}
-    public Book(int id, String name, String author, int year, Integer personId) {
-        this.id = id;
+    public Book(String name, String author, int year,Person person) {
         this.name = name;
         this.author = author;
         this.year = year;
-        this.personId = personId != null
-                                    ? personId
-                                    : -1;
+        this.person = person;
     }
 
     public int getId() {
@@ -61,13 +70,14 @@ public class Book {
     public void setYear(int year) {
         this.year = year;
     }
-    public int getPersonId() {
-        return personId;
+
+    public Person getPerson() {
+        return person;
     }
 
-    public void setPersonId(Integer personId) {
-        this.personId = personId != null
-                ? personId
-                : -1;
+    public void setPerson(Person person) {
+        this.person = person;
     }
+
+
 }

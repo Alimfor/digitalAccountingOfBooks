@@ -1,14 +1,27 @@
 package com.gaziyev.spring.annotations.Validators;
 
 import com.gaziyev.spring.annotations.IAnnotations.Unique;
+import com.gaziyev.spring.dao.PersonDAO;
+import jakarta.transaction.Transactional;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import jakarta.validation.constraintvalidation.SupportedValidationTarget;
+import jakarta.validation.constraintvalidation.ValidationTarget;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Component;
 
-public class UniqueValidator implements ConstraintValidator<Unique,String> {
+import java.util.List;
+
+@Component
+public class UniqueValidator implements ConstraintValidator<Unique, String> {
+    private final PersonDAO personDAO;
+
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    public UniqueValidator(PersonDAO personDAO) {
+        this.personDAO = personDAO;
+    }
 
     @Override
     public void initialize(Unique constraintAnnotation) {
@@ -17,8 +30,8 @@ public class UniqueValidator implements ConstraintValidator<Unique,String> {
 
     @Override
     public boolean isValid(String s, ConstraintValidatorContext constraintValidatorContext) {
-        String query = "SELECT COUNT(*) FROM person WHERE fullName = ?";
-        int count = jdbcTemplate.queryForObject(query,new Object[]{s},Integer.class);
-        return count == 0;
+        Long count = personDAO.getPeopleCountByFullName(s);
+
+        return count == 0L;
     }
 }

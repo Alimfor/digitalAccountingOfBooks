@@ -3,24 +3,36 @@ package com.gaziyev.spring.models;
 import com.gaziyev.spring.annotations.IAnnotations.MaxBirthYear;
 import com.gaziyev.spring.annotations.IAnnotations.MinYear;
 import com.gaziyev.spring.annotations.IAnnotations.Unique;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
+import java.util.List;
+
+@Entity
+@Table(name = "person")
 public class Person {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    @Unique
     @NotEmpty(message = "Не забудьте указать ФИО")
     @Size(min = 6, max = 200, message = "ФИО не должно быть меньше 6, и больше 200 букв!")
-    @Unique()
+    @Column(name = "fullName")
     private String fullName;
 
-    @MinYear()
-    @MaxBirthYear()
+    @MinYear
+    @MaxBirthYear
+    @Column(name = "birthYear")
     private int birthYear;
 
+    @OneToMany(mappedBy = "person")
+    private List<Book> books;
+
     public Person(){}
-    public Person(int id, String fullName, int birthYear) {
-        this.id = id;
+    public Person(String fullName, int birthYear) {
         this.fullName = fullName;
         this.birthYear = birthYear;
     }
@@ -47,5 +59,13 @@ public class Person {
 
     public void setBirthYear(int birthYear) {
         this.birthYear = birthYear;
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
     }
 }

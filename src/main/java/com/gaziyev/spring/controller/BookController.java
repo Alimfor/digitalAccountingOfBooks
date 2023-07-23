@@ -36,7 +36,7 @@ public class BookController {
         Book book = bookDAO.show(id);
         model.addAttribute("book",book);
         model.addAttribute("people",personDAO.index());
-        model.addAttribute("personWithBook",personDAO.show(book.getPersonId()));
+        model.addAttribute("personWithBook",personDAO.show(book.getPerson() == null ? 0 : book.getPerson().getId()));
         return "book/show";
     }
 
