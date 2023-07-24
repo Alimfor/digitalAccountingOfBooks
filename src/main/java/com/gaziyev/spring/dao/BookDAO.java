@@ -2,7 +2,8 @@ package com.gaziyev.spring.dao;
 
 import com.gaziyev.spring.models.Book;
 import com.gaziyev.spring.models.Person;
-import jakarta.transaction.Transactional;
+import org.hibernate.Hibernate;
+import org.springframework.transaction.annotation.Transactional;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +21,14 @@ public class BookDAO {
         this.sessionFactory = sessionFactory;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Book> index() {
         Session session = sessionFactory.getCurrentSession();
         return session.createQuery("SELECT b FROM Book b", Book.class)
                 .getResultList();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Book show(int id) {
         Session session = sessionFactory.getCurrentSession();
         return session.get(Book.class,id);
@@ -85,10 +86,11 @@ public class BookDAO {
         session.remove(session.get(Book.class,id));
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Book> getAllBooks(int personId) {
         Session session = sessionFactory.getCurrentSession();
-        return session.get(Person.class,personId)
-                .getBooks();
+        Person person =  session.get(Person.class,personId);
+        Hibernate.initialize(person.getBooks());
+        return person.getBooks();
     }
 }

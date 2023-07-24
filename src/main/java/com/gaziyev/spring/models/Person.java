@@ -2,7 +2,6 @@ package com.gaziyev.spring.models;
 
 import com.gaziyev.spring.annotations.IAnnotations.MaxBirthYear;
 import com.gaziyev.spring.annotations.IAnnotations.MinYear;
-import com.gaziyev.spring.annotations.IAnnotations.Unique;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
@@ -17,7 +16,6 @@ public class Person {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Unique
     @NotEmpty(message = "Не забудьте указать ФИО")
     @Size(min = 6, max = 200, message = "ФИО не должно быть меньше 6, и больше 200 букв!")
     @Column(name = "fullName")

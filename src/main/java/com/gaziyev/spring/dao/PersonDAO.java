@@ -1,7 +1,7 @@
 package com.gaziyev.spring.dao;
 
 import com.gaziyev.spring.models.Person;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class PersonDAO {
         this.sessionFactory = sessionFactory;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Person> index() {
         Session session = sessionFactory.getCurrentSession();
 
@@ -26,7 +26,7 @@ public class PersonDAO {
                                     .getResultList();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Person show(int id) {
         Session session = sessionFactory.getCurrentSession();
         return session.get(Person.class,id);
@@ -54,15 +54,5 @@ public class PersonDAO {
     public void deleted(int id) {
         Session session = sessionFactory.getCurrentSession();
         session.remove(session.get(Person.class,id));
-    }
-
-    @Transactional
-    public Long getPeopleCountByFullName(String fullName) {
-        Session session = sessionFactory.getCurrentSession();
-
-        String query = "SELECT COUNT(*) FROM Person WHERE fullName = :fullName";
-        return session.createQuery(query, Long.class)
-                .setParameter("fullName", fullName)
-                .getSingleResult();
     }
 }
