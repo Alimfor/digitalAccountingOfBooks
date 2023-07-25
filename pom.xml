@@ -11,7 +11,7 @@
   <properties>
     <maven.compiler.source>1.17</maven.compiler.source>
     <maven.compiler.target>1.17</maven.compiler.target>
-    <spring.version>6.0.9</spring.version>
+    <spring.version>6.0.11</spring.version>
     <thymeleaf.version>3.1.1.RELEASE</thymeleaf.version>
     <jakarta.servlet.version>6.0.0</jakarta.servlet.version>
     <hibernate.validator.version>8.0.0.Final</hibernate.validator.version>
@@ -98,6 +98,13 @@
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
       <version>${postgresql.version}</version>
+    </dependency>
+
+    <!-- Spring-data JPA -->
+    <dependency>
+      <groupId>org.springframework.data</groupId>
+      <artifactId>spring-data-jpa</artifactId>
+      <version>3.1.2</version>
     </dependency>
 
   </dependencies>
