@@ -1,10 +1,12 @@
 package com.gaziyev.spring.models;
 
 import com.gaziyev.spring.annotations.IAnnotations.MaxCurrentYear;
-import com.gaziyev.spring.annotations.IAnnotations.MinYear;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
+
+import java.time.LocalDate;
+import java.util.Date;
 
 @Entity
 @Table(name = "book")
@@ -30,6 +32,10 @@ public class Book {
     @ManyToOne
     @JoinColumn(name = "personId",referencedColumnName = "id")
     private Person person;
+
+    @Column(name = "issued")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date issued;
 
     public Book() {}
     public Book(String name, String author, int year,Person person) {
@@ -79,5 +85,11 @@ public class Book {
         this.person = person;
     }
 
+    public Date getIssued() {
+        return issued;
+    }
 
+    public void setIssued(Date issued) {
+        this.issued = issued;
+    }
 }

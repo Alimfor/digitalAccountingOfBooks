@@ -1,7 +1,7 @@
 package com.gaziyev.spring.controller;
 
+import com.gaziyev.spring.annotations.Validators.PersonValidator;
 import com.gaziyev.spring.models.Person;
-import com.gaziyev.spring.services.BooksService;
 import com.gaziyev.spring.services.PeopleService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/people")
 public class PeopleController {
     private final PeopleService peopleService;
-    private final BooksService booksService;
+    private final PersonValidator personValidator;
 
     @Autowired
-    public PeopleController(PeopleService peopleService, BooksService booksService) {
+    public PeopleController(PeopleService peopleService, PersonValidator personValidator) {
         this.peopleService = peopleService;
-        this.booksService = booksService;
+        this.personValidator = personValidator;
     }
 
     @GetMapping()
@@ -30,8 +30,12 @@ public class PeopleController {
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model) {
-        model.addAttribute("person",peopleService.findOne(id));
-        model.addAttribute("currentBooks", booksService.findBooksByPerson(id));
+        Person person = peopleService.findOne(id);
+
+        model.addAttribute("person",person);
+        model.addAttribute("currentBooks", peopleService.getBooksByPersonId(person.getId()));
+        model.addAttribute("service",peopleService);
+
         return "people/show";
     }
 
@@ -43,6 +47,7 @@ public class PeopleController {
     @PostMapping()
     public String create(@ModelAttribute("person") @Valid Person person,
                          BindingResult bindingResult) {
+        personValidator.validate(person,bindingResult);
         if (bindingResult.hasErrors()) return "people/new";
 
         peopleService.save(person);
@@ -59,6 +64,7 @@ public class PeopleController {
     public String update(@ModelAttribute("person") @Valid Person person,
                          BindingResult bindingResult,
                          @PathVariable("id") int id) {
+        personValidator.validate(person,bindingResult);
         if (bindingResult.hasErrors()) return "people/edit";
 
         peopleService.update(id,person);

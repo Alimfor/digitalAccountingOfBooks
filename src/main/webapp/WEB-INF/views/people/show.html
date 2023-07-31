@@ -3,19 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <title>Человек</title>
+    <link rel="stylesheet" th:href="@{/static/styles/people/for_show_person.css}">
 </head>
 <body>
     <p th:text="${'ФИО: ' + person.getFullName()}">VALUE</p>
+<<<<<<< HEAD
     <p th:text="${'Год рождения: ' + person.getBirthYear()}">VALUE</p>
+=======
+    <p th:text="${'Дата рождения: ' + #dates.format(person.getDateOfBirth(), 'yyyy-MM-dd')}">VALUE</p>
+>>>>>>> ecacc1e (final Spring data JPA project)
 
     <br/>
     <hr/>
+
     <div th:if="${currentBooks.isEmpty()}">
         <p>Человек не взял ни одной книги</p>
     </div>
     <div th:unless="${currentBooks.isEmpty()}">
         <p>Книги:</p>
+<<<<<<< HEAD
         <p style="display: inline" th:each="book,iterStat : ${currentBooks}" th:text="${book.getName()} + (${!iterStat.last} ? ',' : '')"></p>
+=======
+        <div>
+            <p class="person_book"
+               th:each="book,iterStat : ${currentBooks}"
+               th:text="${book.getName()} +  ', '
+                        + ${book.getAuthor()} +  ', '
+                        + ${book.getYear()} +
+                        (${!iterStat.last}? ', ': '')"
+               th:class="${service.overdue(book) ? 'overdue' : ''}"
+            ></p>
+        </div>
+>>>>>>> ecacc1e (final Spring data JPA project)
     </div>
     <br/>
     <hr/>

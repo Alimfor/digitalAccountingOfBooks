@@ -3,10 +3,18 @@ package com.gaziyev.spring.services;
 import com.gaziyev.spring.models.Book;
 import com.gaziyev.spring.models.Person;
 import com.gaziyev.spring.repositories.BooksRepository;
+<<<<<<< HEAD
 import org.hibernate.Hibernate;
+=======
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+>>>>>>> ecacc1e (final Spring data JPA project)
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,8 +29,16 @@ public class BooksService {
         this.peopleService = peopleService;
     }
 
+<<<<<<< HEAD
     public List<Book> findAll() {
         return booksRepository.findAll();
+=======
+    public List<Book> findAll(int pageNum,int size, boolean sort_by_year) {
+        Page<Book> page = sort_by_year
+                                ? booksRepository.findAll( PageRequest.of(pageNum,size,Sort.by("year")))
+                                : booksRepository.findAll( PageRequest.of(pageNum,size));
+        return page.getContent();
+>>>>>>> ecacc1e (final Spring data JPA project)
     }
 
     public Book findOne(int id) {
@@ -30,8 +46,12 @@ public class BooksService {
         return foundBook.orElse(null);
     }
 
-    public List<Book> findBooksByPerson(int id) {
-        return booksRepository.findBooksByPerson(peopleService.findOne(id));
+    public List<Book> findByNameStartingWith(String bookName,int page, int size) {
+        return booksRepository.findByNameStartingWith(bookName,PageRequest.of(
+                                                            page,size,
+                                                            Sort.by("name","year")
+                                                        )
+                                                );
     }
 
     @Transactional
@@ -52,7 +72,13 @@ public class BooksService {
 
     @Transactional
     public void updateBookPersonRelationship(int bookId,int personId) {
-        booksRepository.updateBookPersonRelationship(bookId,personId);
+        Book book = findOne(bookId);
+        Person person = peopleService.findOne(personId);
+
+        if (book != null && person != null) {
+            book.setIssued(new Date());
+            booksRepository.updateBookPersonRelationship(bookId, personId);
+        }
     }
 
     @Transactional

@@ -10,9 +10,15 @@
     <input type="text" th:field="*{fullName}" id="fullName">
     <div style="color: red" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}">Full name error</div>
     <br/>
+<<<<<<< HEAD
     <label for="birthYear">Введите год рождения:</label>
     <input type="text" th:field="*{birthYear}" id="birthYear">
     <div style="color: red" th:if="${#fields.hasErrors('birthYear')}" th:errors="*{birthYear}">The birth of year error</div>
+=======
+    <label for="dateOfBirth">Введите дату рождения (dd-mm-yyyy):</label>
+    <input type="text" th:field="*{dateOfBirth}" id="dateOfBirth">
+    <div style="color: red" th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}">The dateOfBirth error</div>
+>>>>>>> ecacc1e (final Spring data JPA project)
     <br/>
     <input type="submit" value="Создать!">
 </form>

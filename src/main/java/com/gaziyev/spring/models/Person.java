@@ -1,11 +1,14 @@
 package com.gaziyev.spring.models;
 
-import com.gaziyev.spring.annotations.IAnnotations.MaxBirthYear;
-import com.gaziyev.spring.annotations.IAnnotations.MinYear;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
+<<<<<<< HEAD
+=======
+import java.time.LocalDate;
+import java.util.Date;
+>>>>>>> ecacc1e (final Spring data JPA project)
 import java.util.List;
 
 @Entity
@@ -21,10 +24,20 @@ public class Person {
     @Column(name = "fullName")
     private String fullName;
 
+<<<<<<< HEAD
     @MinYear
     @MaxBirthYear
     @Column(name = "birthYear")
     private int birthYear;
+=======
+    @Column(name = "date_of_birth")
+    @DateTimeFormat(pattern = "dd-MM-yyyy")
+    private Date dateOfBirth;
+
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
+>>>>>>> ecacc1e (final Spring data JPA project)
 
     @OneToMany(mappedBy = "person")
     private List<Book> books;

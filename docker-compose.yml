@@ -1,0 +1,17 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:13.3
+    container_name: java-postgres
+    environment:
+      POSTGRES_DB: "project1"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "Gothick3"
+
+    ports:
+      - "5432:5432"
+  app:
+    build: ./
+    container_name: 'java-app'
+    ports:
+      - "8080:8080"

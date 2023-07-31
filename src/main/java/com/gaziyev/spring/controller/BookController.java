@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @Controller
 @RequestMapping("/book")
@@ -25,9 +27,19 @@ public class BookController {
     }
 
     @GetMapping()
+<<<<<<< HEAD
     public String index(Model model){
         model.addAttribute("books",booksService.findAll());
         return "book/index";
+=======
+    public String index(Model model,
+                        @RequestParam(required = false, defaultValue = "0") int page,
+                        @RequestParam(required = false, defaultValue = "10") int size,
+                        @RequestParam(required = false, defaultValue = "false") boolean sort_by_year
+    ){
+        model.addAttribute("books",booksService.findAll(page,size,sort_by_year));
+        return "books/index";
+>>>>>>> ecacc1e (final Spring data JPA project)
     }
 
     @GetMapping("/{id}")
@@ -38,7 +50,23 @@ public class BookController {
         model.addAttribute("book",book);
         model.addAttribute("people",peopleService.findAll());
         model.addAttribute("personWithBook",peopleService.findOne(book.getPerson() == null ? 0 : book.getPerson().getId()));
-        return "book/show";
+        return "books/show";
+    }
+
+    @GetMapping("/search")
+    public String search(@RequestParam(required = false) String book_name,
+                         @RequestParam(required = false, defaultValue = "0") int page,
+                         @RequestParam(required = false, defaultValue = "10") int size,
+                         Model model
+    ) {
+        boolean isBookNameNotNull = book_name != null;
+        if (isBookNameNotNull) {
+            List<Book> books = booksService.findByNameStartingWith(book_name, page, size);
+            model.addAttribute("books", books);
+        }
+        model.addAttribute("isBookNameNotNull",isBookNameNotNull);
+
+        return "books/search";
     }
 
     @PatchMapping("/link")
@@ -56,14 +84,14 @@ public class BookController {
 
     @GetMapping("/new")
     public String newBook(@ModelAttribute("book") Book book) {
-        return "book/new";
+        return "books/new";
     }
 
     @PostMapping()
     public String create(@ModelAttribute("book") @Valid Book book,
                          BindingResult bindingResult)
     {
-        if(bindingResult.hasErrors()) return "book/new";
+        if(bindingResult.hasErrors()) return "books/new";
 
         booksService.save(book);
         return "redirect:/book";
@@ -72,7 +100,7 @@ public class BookController {
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id) {
         model.addAttribute("book",booksService.findOne(id));
-        return "book/edit";
+        return "books/edit";
     }
 
     @PatchMapping("/{id}")
@@ -80,7 +108,7 @@ public class BookController {
                          BindingResult bindingResult,
                          @PathVariable("id") int id)
     {
-        if (bindingResult.hasErrors()) return "book/edit";
+        if (bindingResult.hasErrors()) return "books/edit";
 
         booksService.update(id,book);
         return "redirect:/book";
