@@ -27,11 +27,6 @@ public class BookController {
     }
 
     @GetMapping()
-<<<<<<< HEAD
-    public String index(Model model){
-        model.addAttribute("books",booksService.findAll());
-        return "book/index";
-=======
     public String index(Model model,
                         @RequestParam(required = false, defaultValue = "0") int page,
                         @RequestParam(required = false, defaultValue = "10") int size,
@@ -39,7 +34,6 @@ public class BookController {
     ){
         model.addAttribute("books",booksService.findAll(page,size,sort_by_year));
         return "books/index";
->>>>>>> ecacc1e (final Spring data JPA project)
     }
 
     @GetMapping("/{id}")

@@ -11,6 +11,7 @@ import org.springframework.validation.Validator;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 
 @Component
 public class PersonValidator implements Validator {
@@ -30,8 +31,8 @@ public class PersonValidator implements Validator {
     public void validate(Object target, Errors errors) {
         Person person = (Person) target;
 
-
-        if (person.getId() != 0 && peopleService.getIdByFullName(person.getFullName()) != person.getId())
+        List<Integer> ids = peopleService.getIdByFullName(person.getFullName());
+        if (person.getId() != 0 &&  ids.contains(person.getId()) && ids.size() > 1)
             errors.rejectValue("fullName", "", "Человек с таким ФИО уже существует");
 
         if (person.getId() == 0 && peopleService.getPersonByFullName(person.getFullName()).isPresent())

@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Добавление книги</title>
+    <link rel="stylesheet" th:href="@{/styles/books/new.css}"/>
 </head>
 <body>
   <form th:method="POST" th:action="@{/book}" th:object="${book}">

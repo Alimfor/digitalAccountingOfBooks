@@ -3,16 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Человек</title>
+    <link rel="stylesheet" th:href="@{/styles/people/index.css}">
 </head>
 <body>
     <div th:each="person : ${people}">
         <a th:href="@{/people/{id}(id = ${person.getId()})}"
             th:text="${person.getFullName()} + ','
-<<<<<<< HEAD
-            + ${person.getBirthYear()}"
-=======
             + ${#dates.format(person.getDateOfBirth(), 'yyyy-MM-dd')}"
->>>>>>> ecacc1e (final Spring data JPA project)
         >person</a>
     </div>
     <br/>

@@ -34,7 +34,6 @@ public class PeopleController {
 
         model.addAttribute("person",person);
         model.addAttribute("currentBooks", peopleService.getBooksByPersonId(person.getId()));
-        model.addAttribute("service",peopleService);
 
         return "people/show";
     }

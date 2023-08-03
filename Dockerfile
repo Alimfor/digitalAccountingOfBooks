@@ -1,7 +1,7 @@
-FROM tomcat:10.1.9
+FROM openjdk:17-jdk
 
-WORKDIR /usr/local/tomcat/webapps
+WORKDIR /app
 
-COPY /target/FProj.war /usr/local/tomcat/webapps
+COPY /target/spring-0.0.1-SNAPSHOT.jar /app/spring-0.0.1-SNAPSHOT.jar
 
-CMD ["catalina.sh", "run"]
+CMD ["java", "-jar", "spring-0.0.1-SNAPSHOT.jar"]

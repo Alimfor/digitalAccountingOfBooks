@@ -6,6 +6,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 
 @Entity
@@ -30,12 +31,15 @@ public class Book {
     private int year;
 
     @ManyToOne
-    @JoinColumn(name = "personId",referencedColumnName = "id")
+    @JoinColumn(name = "personid",referencedColumnName = "id")
     private Person person;
 
     @Column(name = "issued")
     @Temporal(TemporalType.TIMESTAMP)
     private Date issued;
+
+    @Transient
+    private boolean expired;
 
     public Book() {}
     public Book(String name, String author, int year,Person person) {
@@ -91,5 +95,13 @@ public class Book {
 
     public void setIssued(Date issued) {
         this.issued = issued;
+    }
+
+    public boolean isExpired() {
+        return expired;
+    }
+
+    public void setExpired(boolean expired) {
+        this.expired = expired;
     }
 }

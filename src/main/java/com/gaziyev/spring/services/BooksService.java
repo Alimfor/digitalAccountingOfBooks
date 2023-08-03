@@ -3,17 +3,12 @@ package com.gaziyev.spring.services;
 import com.gaziyev.spring.models.Book;
 import com.gaziyev.spring.models.Person;
 import com.gaziyev.spring.repositories.BooksRepository;
-<<<<<<< HEAD
-import org.hibernate.Hibernate;
-=======
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
->>>>>>> ecacc1e (final Spring data JPA project)
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -29,16 +24,11 @@ public class BooksService {
         this.peopleService = peopleService;
     }
 
-<<<<<<< HEAD
-    public List<Book> findAll() {
-        return booksRepository.findAll();
-=======
     public List<Book> findAll(int pageNum,int size, boolean sort_by_year) {
         Page<Book> page = sort_by_year
                                 ? booksRepository.findAll( PageRequest.of(pageNum,size,Sort.by("year")))
                                 : booksRepository.findAll( PageRequest.of(pageNum,size));
         return page.getContent();
->>>>>>> ecacc1e (final Spring data JPA project)
     }
 
     public Book findOne(int id) {
