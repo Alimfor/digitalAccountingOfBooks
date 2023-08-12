@@ -1,6 +1,6 @@
-package com.gaziyev.spring.annotations.Validators;
+package com.gaziyev.spring.util;
 
-import com.gaziyev.spring.annotations.IAnnotations.MaxCurrentYear;
+import com.gaziyev.spring.util.IAnnotations.MaxCurrentYear;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 

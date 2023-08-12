@@ -1,12 +1,10 @@
 package com.gaziyev.spring.models;
 
-import com.gaziyev.spring.annotations.IAnnotations.MaxCurrentYear;
+import com.gaziyev.spring.util.IAnnotations.MaxCurrentYear;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
 
 @Entity

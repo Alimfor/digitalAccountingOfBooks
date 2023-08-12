@@ -1,6 +1,6 @@
 package com.gaziyev.spring.controller;
 
-import com.gaziyev.spring.annotations.Validators.PersonValidator;
+import com.gaziyev.spring.util.PersonValidator;
 import com.gaziyev.spring.models.Person;
 import com.gaziyev.spring.services.PeopleService;
 import jakarta.validation.Valid;

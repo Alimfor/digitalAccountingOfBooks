@@ -1,4 +1,4 @@
-package com.gaziyev.spring.annotations.Validators;
+package com.gaziyev.spring.util;
 
 
 import com.gaziyev.spring.models.Person;

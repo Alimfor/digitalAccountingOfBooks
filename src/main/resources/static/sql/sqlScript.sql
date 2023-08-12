@@ -11,12 +11,11 @@ CREATE TABLE book(
     author VARCHAR(100) NOT NULL,
     year INT NOT NULL,
     personId INT REFERENCES person(id) ON DELETE SET NULL,
-    issued TIMESTAMP DEFAULT '1970-01-01 00:00:00'
+    issued TIMESTAMP
 );
 
-create procedure remove_person_frombook(IN book_id integer)
-    language plpgsql
-as
+CREATE PROCEDURE remove_person_frombook(IN book_id INT)
+AS
 $$
 BEGIN
 UPDATE Book
@@ -24,22 +23,17 @@ SET personId = NULL,
     issued = NULL
 WHERE id = book_id;
 END;
-$$;
+$$ LANGUAGE plpgsql;
 
-alter procedure remove_person_frombook(integer) owner to postgres;
-
-create procedure update_book_person_relationship(IN book_id integer, IN person_id integer)
-    language plpgsql
-as
+CREATE PROCEDURE update_book_person_relationship(IN book_id INT, IN person_id INT)
+AS
 $$
 BEGIN
 UPDATE Book
 SET personId = person_id
 WHERE id = book_id;
 END;
-$$;
-
-alter procedure update_book_person_relationship(integer, integer) owner to postgres;
+$$ LANGUAGE plpgsql;
 
 INSERT INTO person (fullName, date_of_birth, created_at) VALUES
 ('John Smith', '1990-03-15', CURRENT_TIMESTAMP),
@@ -71,6 +65,5 @@ INSERT INTO book (name, author, year, personId) VALUES
 ('The Old Man and the Sea', 'Ernest Hemingway', 1952, NULL),
 ('Moby-Dick', 'Herman Melville', 1851, NULL),
 ('War and Peace', 'Leo Tolstoy', 1869, NULL),
-('The Divine Comedy', 'Dante Alighieri', 1320, NULL),
-('The Little Prince', 'Antoine de Saint-Exupery', 1943, NULL);
+('The Divine Comedy', 'Dante Alighieri', 1320, NULL);
 
