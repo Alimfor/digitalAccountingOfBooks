@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Search</title>
+    <link rel="stylesheet" th:href="@{/css/books/search.css}"/>
+</head>
+
+<body>
+<a th:href="@{/admin/categories}">Вернуться в меню</a>
+<br/>
+<label for="search">Введите поисковой запрос:</label>
+<input type="text" id="search"/>
+<br/>
+<button onclick="sendText()">Искать</button>
+
+<br/>
+<div class="searched_books" id="searchedBooks"
+     th:if="${isBookNameNotNull}">
+    <div th:if="${!books.isEmpty()}">
+        <div th:each="book : ${books}">
+
+            <div th:if="${book.getPerson() != null}">
+                <p th:text="${book.getName()} + ','
+                    + ${book.getAuthor()} + ','
+                    + ${book.getYear()}"></p>
+
+                <p th:text="'Книга сейчас у: ' + ${book.getPerson().getFullName()}"></p>
+            </div>
+
+            <div th:unless="${book.getPerson() != null}">
+                <p th:text="${book.getName()} + ','
+                    + ${book.getAuthor()} + ','
+                    + ${book.getYear()}"></p>
+                <p>Книга свободна</p>
+            </div>
+
+            <hr/>
+        </div>
+    </div>
+
+    <div th:unless="${!books.isEmpty()}">
+        <p>Книг не найдено!</p>
+    </div>
+</div>
+
+<script th:src="@{/js/books/search.js}"></script>
+</body>
+</html>

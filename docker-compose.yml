@@ -4,8 +4,10 @@ services:
   postgres:
     image: postgres
     container_name: java-postgres
-    env_file:
-      - ./src/main/resources/static/env_vars.env
+    environment:
+      POSTGRES_DB: "project1"
+      POSTGRES_USER: "postgres"
+      POSTGRES_PASSWORD: "Gothick3"
     volumes:
       - ./src/main/resources/static/sql/sqlScript.sql:/docker-entrypoint-initdb.d/sqlScript.sql
     ports:

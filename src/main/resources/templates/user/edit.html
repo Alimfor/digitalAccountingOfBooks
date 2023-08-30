@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование человека</title>
+    <link rel="stylesheet" th:href="@{/css/errors/errorMessage.css}">
+    <link rel="stylesheet" th:href="@{/css/people/edit.css}"/>
+</head>
+
+<body>
+<form th:method="PATCH" th:action="@{/user/{id}(id = ${person.getId()})}" th:object="${person}">
+    <label for="fullName">Введите логин:</label>
+    <input type="text" th:field="*{fullName}" id="fullName">
+    <div class="error_message" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}">Full name error</div>
+    <br/>
+
+    <label for="dateOfBirth">Введите дату рождения (дд.мм.гггг):</label>
+    <input type="text" th:field="*{dateOfBirth}" id="dateOfBirth">
+    <div class="error_message" th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}">The dateOfBirth
+        error
+    </div>
+    <br/>
+
+    <input type="submit" value="Редактировать!">
+</form>
+<a th:href="@{'/user/' + ${person.getId()}}">Вернуться в личные данные</a>
+</body>
+</html>

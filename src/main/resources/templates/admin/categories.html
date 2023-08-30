@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Choose</title>
+</head>
+<body>
+
+<a th:href="@{people}">people</a>
+<br/>
+<a th:href="@{books}">book</a>
+<br/>
+<a th:href="@{search}">search</a>
+<br/>
+
+<form th:action="@{/logout}" th:method="POST">
+    <input type="submit" value="logout">
+</form>
+</body>
+</html>

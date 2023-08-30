@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование книги</title>
+    <link rel="stylesheet" th:href="@{/css/errors/errorMessage.css}"/>
+    <link rel="stylesheet" th:href="@{/css/books/edit.css}"/>
+</head>
+
+<body>
+<form th:method="PATCH" th:action="@{/book/{id}(id = ${book.getId()})}" th:object="${book}">
+    <label for="name">Введите название книги:</label>
+    <input type="text" th:field="*{name}" id="name"/>
+    <div class="error_message" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Name error</div>
+    <br/>
+
+    <label for="author">Введите имя автора:</label>
+    <input type="text" th:field="*{author}" id="author"/>
+    <div class="error_message" th:if="${#fields.hasErrors('author')}" th:errors="*{author}">author error</div>
+    <br/>
+
+    <label for="year">Введите год издательства:</label>
+    <input type="text" th:field="*{year}" id="year"/>
+    <div class="error_message" th:if="${#fields.hasErrors('year')}" th:errors="*{year}">year error</div>
+    <br/>
+
+    <input type="submit" value="Редактировать!">
+</form>
+<a th:href="@{'/book/' + ${book.getId()}}">Вернуться в просмотр книги</a>
+</body>
+</html>

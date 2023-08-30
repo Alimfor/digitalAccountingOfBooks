@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Человек</title>
+    <link rel="stylesheet" th:href="@{/css/people/index.css}">
+</head>
+
+<body>
+<div th:each="person : ${people}">
+    <a th:href="@{/people/{id}(id = ${person.getId()})}"
+       th:text="${person.getFullName()} + ','
+            + ${person.getDateOfBirth()} + ','
+            + ${person.getRole()}"
+    >person</a>
+</div>
+<br/>
+<hr/>
+<a href="people/new">Добавить человека</a>
+<br/>
+<a th:href="@{/admin/categories}">Вернуться в меню</a>
+</body>
+</html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Книга</title>
+    <link rel="stylesheet" th:href="@{/css/books/show.css}"/>
+</head>
+
+<body>
+<div th:if="${!books.isEmpty()}">
+    <p>Книги:</p>
+    <table>
+        <tbody>
+        <tr th:each="book : ${books}">
+            <td>
+                <form th:method="PATCH" th:action="@{/user/release}">
+                    <input type="hidden" name="bookId" th:value="${book.getId()}">
+                    <input type="hidden" name="personId" th:value="${book.getPerson().getId()}">
+                    <input type="submit" value="Освободить книгу">
+                </form>
+
+                <span th:class="${book.isExpired() ? 'overdue' : ''}"
+                      th:text="${book.getName() + ', ' + book.getAuthor() + ', ' + book.getYear()}">
+                            book
+                        </span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div th:unless="${!books.isEmpty()}">
+    <p>Вы не взяли ни одной книги</p>
+</div>
+
+<a th:href="@{/user/infoAbout}">Вернуться в меню</a>
+</body>
+</html>

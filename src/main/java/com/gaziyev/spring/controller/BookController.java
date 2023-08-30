@@ -1,10 +1,14 @@
 package com.gaziyev.spring.controller;
 
-import com.gaziyev.spring.models.Book;
-import com.gaziyev.spring.models.Person;
-import com.gaziyev.spring.services.BooksService;
-import com.gaziyev.spring.services.PeopleService;
+import com.gaziyev.spring.dto.BookDTO;
+import com.gaziyev.spring.dto.PersonDTO;
+import com.gaziyev.spring.model.Book;
+import com.gaziyev.spring.model.Person;
+import com.gaziyev.spring.service.BooksService;
+import com.gaziyev.spring.service.PeopleService;
+import com.gaziyev.spring.util.BookValidator;
 import jakarta.validation.Valid;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,11 +23,15 @@ import java.util.List;
 public class BookController {
     private final BooksService booksService;
     private final PeopleService peopleService;
+    private final BookValidator bookValidator;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public BookController(BooksService booksService, PeopleService peopleService) {
+    public BookController(BooksService booksService, PeopleService peopleService, BookValidator bookValidator, ModelMapper modelMapper) {
         this.booksService = booksService;
         this.peopleService = peopleService;
+        this.bookValidator = bookValidator;
+        this.modelMapper = modelMapper;
     }
 
     @GetMapping()
@@ -31,20 +39,30 @@ public class BookController {
                         @RequestParam(required = false, defaultValue = "0") int page,
                         @RequestParam(required = false, defaultValue = "10") int size,
                         @RequestParam(required = false, defaultValue = "false") boolean sort_by_year
-    ){
-        model.addAttribute("books",booksService.findAll(page,size,sort_by_year));
-        return "books/index";
+    ) {
+        model.addAttribute(
+                "books",
+                booksService.findAll(page, size, sort_by_year)
+                        .stream().map(this::convertBookToBookDTO)
+                        .toList()
+        );
+        return "admin/books/index";
     }
 
     @GetMapping("/{id}")
     public String show(@PathVariable("id") int id, Model model,
-                       @ModelAttribute("person")Person person) {
-        Book book = booksService.findOne(id);
+                       @ModelAttribute("person") PersonDTO personDTO) {
+        BookDTO bookDTO = convertBookToBookDTO(booksService.findOne(id));
 
-        model.addAttribute("book",book);
-        model.addAttribute("people",peopleService.findAll());
-        model.addAttribute("personWithBook",peopleService.findOne(book.getPerson() == null ? 0 : book.getPerson().getId()));
-        return "books/show";
+        model.addAttribute("book", bookDTO);
+        model.addAttribute("personWithBook", bookDTO.getPerson());
+        model.addAttribute(
+                "people",
+                peopleService.findAll()
+                        .stream().map(this::convertPersonToPersonDTO)
+                        .toList()
+        );
+        return "admin/books/show";
     }
 
     @GetMapping("/search")
@@ -55,18 +73,21 @@ public class BookController {
     ) {
         boolean isBookNameNotNull = book_name != null;
         if (isBookNameNotNull) {
-            List<Book> books = booksService.findByNameStartingWith(book_name, page, size);
+            List<BookDTO> books = booksService.findByNameStartingWith(book_name, page, size)
+                    .stream().map(this::convertBookToBookDTO)
+                    .toList();
+
             model.addAttribute("books", books);
         }
-        model.addAttribute("isBookNameNotNull",isBookNameNotNull);
+        model.addAttribute("isBookNameNotNull", isBookNameNotNull);
 
-        return "books/search";
+        return "admin/books/search";
     }
 
     @PatchMapping("/link")
-    public String linkBookToPerson(@ModelAttribute("person") Person person,
+    public String linkBookToPerson(@ModelAttribute("person") PersonDTO personDTO,
                                    @ModelAttribute("bookId") int bookId) {
-        booksService.updateBookPersonRelationship(bookId,person.getId());
+        booksService.updateBookPersonRelationship(bookId, personDTO.getId());
         return "redirect:/book/" + bookId;
     }
 
@@ -77,40 +98,57 @@ public class BookController {
     }
 
     @GetMapping("/new")
-    public String newBook(@ModelAttribute("book") Book book) {
-        return "books/new";
+    public String newBook(@ModelAttribute("book") BookDTO bookDTO) {
+        return "admin/books/new";
     }
 
     @PostMapping()
-    public String create(@ModelAttribute("book") @Valid Book book,
-                         BindingResult bindingResult)
-    {
-        if(bindingResult.hasErrors()) return "books/new";
+    public String create(@ModelAttribute("book") @Valid BookDTO bookDTO,
+                         BindingResult bindingResult) {
+        bookValidator.validate(convertBookDTOToBook(bookDTO),bindingResult);
+        if (bindingResult.hasErrors()) return "admin/books/new";
 
-        booksService.save(book);
+        booksService.save(convertBookDTOToBook(bookDTO));
         return "redirect:/book";
     }
 
     @GetMapping("/{id}/edit")
     public String edit(Model model, @PathVariable("id") int id) {
-        model.addAttribute("book",booksService.findOne(id));
-        return "books/edit";
+        model.addAttribute(
+                "book",
+                convertBookToBookDTO(
+                        booksService.findOne(id)
+                )
+        );
+        return "admin/books/edit";
     }
 
     @PatchMapping("/{id}")
-    public String update(@ModelAttribute("book") @Valid Book book,
+    public String update(@ModelAttribute("book") @Valid BookDTO bookDTO,
                          BindingResult bindingResult,
-                         @PathVariable("id") int id)
-    {
-        if (bindingResult.hasErrors()) return "books/edit";
+                         @PathVariable("id") int id) {
+        bookValidator.validate(convertBookDTOToBook(bookDTO),bindingResult);
+        if (bindingResult.hasErrors()) return "admin/books/edit";
 
-        booksService.update(id,book);
-        return "redirect:/book";
+        booksService.update(convertBookDTOToBook(bookDTO));
+        return "redirect:/book/" + id;
     }
 
     @DeleteMapping("/{id}")
     public String delete(@PathVariable("id") int id) {
         booksService.delete(id);
         return "redirect:/book";
+    }
+
+    private BookDTO convertBookToBookDTO(Book book) {
+        return modelMapper.map(book, BookDTO.class);
+    }
+
+    private Book convertBookDTOToBook(BookDTO bookDTO) {
+        return modelMapper.map(bookDTO, Book.class);
+    }
+
+    private PersonDTO convertPersonToPersonDTO(Person person) {
+        return modelMapper.map(person, PersonDTO.class);
     }
 }

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Change</title>
+    <link rel="stylesheet" th:href="@{/css/errors/errorMessage.css}"/>
+</head>
+<body>
+<form th:action="@{check}" th:object="${comparison}">
+    <label for="password">Введите пароль:</label>
+    <input type="password" th:field="*{actualPassword}" id="password">
+    <div class="error_message" th:if="${#fields.hasErrors('actualPassword')}" th:errors="*{actualPassword}">password
+        error
+    </div>
+
+    <br/>
+    <input type="submit" value="Отправить">
+</form>
+
+<br/>
+<div th:if="${validPassword}">
+    <form th:action="@{changeRole}" th:method="PATCH">
+        <label for="newRole">Выберите новую роль:</label>
+        <select id="newRole" name="newRole">
+            <option value="ROLE_ADMIN">Admin</option>
+            <option value="ROLE_USER">User</option>
+        </select>
+        <br/>
+        <input type="submit" value="Изменить роль">
+    </form>
+</div>
+
+<br/>
+<button id="history-button">вернуться назад</button>
+<script th:src="@{js}"></script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Человек</title>
+    <link rel="stylesheet" th:href="@{/css/people/show.css}">
+</head>
+
+<body>
+<p th:text="${'Логин: ' + person.getFullName()}">VALUE</p>
+<p th:text="${'Дата рождения: ' + person.getDateOfBirth()}">VALUE</p>
+
+<br/>
+<hr/>
+
+<div th:if="${currentBooks.isEmpty()}">
+    <p>Вы не взяли ни одной книги</p>
+</div>
+<div th:unless="${currentBooks.isEmpty()}">
+    <p>Книги:</p>
+    <br/>
+    <table th:each="book : ${currentBooks}">
+        <tr>
+            <td>
+                <span th:class="${book.isExpired()  ? 'overdue' : ''}"
+                      th:text="${book.getName() + ', ' + book.getAuthor() + ', ' + book.getYear()}">
+                    book
+                </span>
+            </td>
+        </tr>
+    </table>
+</div>
+<br/>
+<hr/>
+
+<form th:action="${person.getId()} + '/edit'">
+    <input type="submit" value="Редактировать">
+</form>
+<form th:action="${person.getId()} + '/changePassword'">
+    <input type="submit" value="Изменить пароль"></input>
+</form>
+<form th:method="DELETE" th:action="${person.getId()}">
+    <input type="submit" value="Удалить">
+</form>
+
+<a th:href="@{/user/infoAbout}">Вернуться в меню</a>
+</body>
+</html>

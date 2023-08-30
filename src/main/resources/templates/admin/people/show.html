@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Человек</title>
+    <link rel="stylesheet" th:href="@{/css/people/show.css}">
+</head>
+
+<body>
+<p th:text="${'Логин: ' + person.getFullName()}">VALUE</p>
+<p th:text="${'Дата рождения: ' + person.getDateOfBirth()}">VALUE</p>
+
+<br/>
+<hr/>
+
+<div th:if="${currentBooks.isEmpty()}">
+    <p>Человек не взял ни одной книги</p>
+</div>
+<div th:unless="${currentBooks.isEmpty()}">
+    <p>Книги:</p>
+    <br/>
+    <table>
+        <tbody>
+        <tr th:each="book : ${currentBooks}">
+            <td>
+                <form th:method="PATCH" th:action="@{/people/release}">
+                    <input type="hidden" name="bookId" th:value="${book.getId()}">
+                    <input type="hidden" name="personId" th:value="${person.getId()}">
+                    <input type="submit" value="Освободить книгу">
+                </form>
+
+                <span th:class="${book.isExpired() ? 'overdue' : ''}"
+                      th:text="${book.getName() + ', ' + book.getAuthor() + ', ' + book.getYear()}">
+                            book
+                        </span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+<br/>
+<hr/>
+
+<div th:if="${!person.isLocked()}">
+    <form th:method="PATCH" th:action="@{/people/{id}/lock(id = ${person.getId()})}">
+        <input type="submit" value="Заблокировать">
+    </form>
+</div>
+<div th:unless="${!person.isLocked()}">
+    <form th:method="PATCH" th:action="@{/people/{id}/activate(id = ${person.getId()})}">
+        <input type="submit" value="Активировать">
+    </form>
+</div>
+
+
+<form th:action="@{/people/{id}/edit(id = ${person.getId()})}">
+    <input type="submit" value="Редактировать">
+</form>
+<form th:method="DELETE" th:action="@{/people/{id}(id = ${person.getId()})}">
+    <input type="submit" value="Удалить">
+</form>
+
+<a th:href="@{/people}">Вернуться в список людей</a>
+</body>
+</html>

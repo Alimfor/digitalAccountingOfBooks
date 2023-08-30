@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+    <link rel="stylesheet"  th:href="@{/css/errors/errorMessage.css}"/>
+</head>
+<body>
+<form name="f" method="post" th:action="@{/process_login}">
+
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+    <label for="username">Введите логин пользователя:</label>
+    <input type="text" name="username" id="username">
+
+    <br/>
+    <label for="password">Введите пароль:</label>
+    <input type="password" name="password" id="password">
+    <br/>
+
+    <input type="submit" value="Login"/>
+
+    <div th:if="${param.error}" class="error_message">
+        Неправильное имя или пароль!
+    </div>
+
+    <div th:if="${param.locked}" class="error_message">
+        Вы были заблокированы!
+    </div>
+
+    <div th:if="${param.deleted}" class="error_message">
+        Вы были удалены или вы поменяли логин. Попробуйте аутентифицироваться еще раз!
+    </div>
+</form>
+
+<a th:href="@{forgotten}">Забыли пароль?</a>
+<br/>
+<a th:href="@{registration}">Зарегистрироваться</a>
+</body>
+</html>

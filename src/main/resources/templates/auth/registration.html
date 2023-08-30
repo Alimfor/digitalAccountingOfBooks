@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" th:href="@{/css/errors/errorMessage.css}"/>
+</head>
+<body>
+<form th:method="POST" th:action="@{/auth/registration}" th:object="${person}">
+    <label for="username">Введите логин пользователя: </label>
+    <input type="text" th:field="*{fullName}" id="username">
+    <div class="error_message" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}">Username error</div>
+    <br/>
+    <label for="dateOfBirth">Введите дату рождения (дд.мм.гггг):</label>
+    <input type="text" th:field="*{dateOfBirth}" id="dateOfBirth">
+    <div class="error_message" th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}">DateOfBirth error
+    </div>
+    <br/>
+    <label for="password">Введите пароль: </label>
+    <input type="password" th:field="*{password}" id="password">
+    <div class="error_message" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Password error</div>
+    <br/>
+    <input type="submit" value="Sign up!"/>
+
+    <p>
+        Если есть аккаунт, можете
+        <a th:href="@{login}"> войти!</a>
+    </p>
+</form>
+</body>
+</html>
