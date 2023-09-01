@@ -6,6 +6,9 @@ import com.gaziyev.spring.security.PersonDetails;
 import com.gaziyev.spring.service.UserService;
 import com.gaziyev.spring.util.PersonValidator;
 import jakarta.validation.Valid;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,18 +17,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 @Controller
 @RequestMapping("/user")
 public class UserController {
-    private final UserService userService;
-    private final ModelMapper modelMapper;
-    private final PersonValidator personValidator;
-
-    public UserController(UserService userService, ModelMapper modelMapper, PersonValidator personValidator) {
-        this.userService = userService;
-        this.modelMapper = modelMapper;
-        this.personValidator = personValidator;
-    }
+    UserService userService;
+    ModelMapper modelMapper;
+    PersonValidator personValidator;
 
     @GetMapping("/accessDenied")
     public String accessDenied() {

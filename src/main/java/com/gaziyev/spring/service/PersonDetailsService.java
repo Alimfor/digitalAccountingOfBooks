@@ -3,6 +3,9 @@ package com.gaziyev.spring.service;
 import com.gaziyev.spring.model.Person;
 import com.gaziyev.spring.repository.PeopleRepository;
 import com.gaziyev.spring.security.PersonDetails;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,15 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 @Service
 public class PersonDetailsService implements UserDetailsService {
-    private final PeopleRepository peopleRepository;
-
-    @Autowired
-    public PersonDetailsService(PeopleRepository peopleRepository) {
-        this.peopleRepository = peopleRepository;
-    }
-
+    PeopleRepository peopleRepository;
 
     @Transactional(readOnly = true)
     public String getUserStatus(String fullName) {

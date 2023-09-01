@@ -4,6 +4,9 @@ package com.gaziyev.spring.util;
 import com.gaziyev.spring.dto.PersonDTO;
 import com.gaziyev.spring.model.Person;
 import com.gaziyev.spring.service.PeopleService;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
@@ -12,14 +15,11 @@ import org.springframework.validation.Validator;
 import java.time.LocalDate;
 import java.util.List;
 
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 @Component
 public class PersonValidator implements Validator {
-    private final PeopleService peopleService;
-
-    @Autowired
-    public PersonValidator(PeopleService peopleService) {
-        this.peopleService = peopleService;
-    }
+    PeopleService peopleService;
 
     @Override
     public boolean supports(Class<?> clazz) {

@@ -6,6 +6,9 @@ import com.gaziyev.spring.handler.CustomAccessDeniedHandler;
 import com.gaziyev.spring.handler.CustomAuthenticationFailureHandler;
 import com.gaziyev.spring.handler.PersonAuthenticationSuccessHandler;
 import com.gaziyev.spring.service.PersonDetailsService;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,22 +25,16 @@ import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.web.filter.OncePerRequestFilter;
 
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-    private final PersonDetailsService personDetailsService;
-    private final PersonAuthenticationSuccessHandler successHandler;
-    private final UserDeletionCheckFilter userDeletionCheckFilter;
-
-    @Autowired
-    public SecurityConfig(PersonDetailsService personDetailsService, PersonAuthenticationSuccessHandler successHandler, UserDeletionCheckFilter userDeletionCheckFilter) {
-        this.personDetailsService = personDetailsService;
-        this.successHandler = successHandler;
-        this.userDeletionCheckFilter = userDeletionCheckFilter;
-    }
+    PersonDetailsService personDetailsService;
+    PersonAuthenticationSuccessHandler successHandler;
+    UserDeletionCheckFilter userDeletionCheckFilter;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

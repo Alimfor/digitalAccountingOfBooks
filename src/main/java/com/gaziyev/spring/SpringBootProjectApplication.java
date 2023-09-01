@@ -8,7 +8,6 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
-//@EnableJpaRepositories(basePackages="com.gaziyev.spring",entityManagerFactoryRef="factoryBean")
 public class SpringBootProjectApplication {
 
     public static void main(String[] args) {

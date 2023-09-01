@@ -3,6 +3,9 @@ package com.gaziyev.spring.service;
 import com.gaziyev.spring.model.Book;
 import com.gaziyev.spring.model.Person;
 import com.gaziyev.spring.repository.BooksRepository;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -13,16 +16,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 @Service
 @Transactional(readOnly = true)
 public class BooksService {
-    private final BooksRepository booksRepository;
-    private final PeopleService peopleService;
-
-    public BooksService(BooksRepository booksRepository, PeopleService peopleService) {
-        this.booksRepository = booksRepository;
-        this.peopleService = peopleService;
-    }
+    BooksRepository booksRepository;
+    PeopleService peopleService;
 
     public List<Book> findAll(int pageNum, int size, boolean sort_by_year) {
         Page<Book> page = sort_by_year

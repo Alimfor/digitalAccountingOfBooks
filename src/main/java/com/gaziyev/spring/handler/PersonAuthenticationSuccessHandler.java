@@ -1,8 +1,9 @@
 package com.gaziyev.spring.handler;
 
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.AccessLevel;
+import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.DefaultRedirectStrategy;
@@ -13,10 +14,10 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.util.Collection;
 
+@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 @Component
 public class PersonAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
-
-    private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+    RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {

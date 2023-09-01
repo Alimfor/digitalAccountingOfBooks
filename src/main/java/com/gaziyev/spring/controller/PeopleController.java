@@ -8,6 +8,9 @@ import com.gaziyev.spring.util.PersonValidator;
 import com.gaziyev.spring.model.Person;
 import com.gaziyev.spring.service.PeopleService;
 import jakarta.validation.Valid;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -17,23 +20,16 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 @Controller
 @RequestMapping("/people")
 public class PeopleController {
-    private final PeopleService peopleService;
-    private final BooksService booksService;
-    private final PersonValidator personValidator;
-    private final AdminService adminService;
-    private final ModelMapper modelMapper;
-
-    @Autowired
-    public PeopleController(PeopleService peopleService, BooksService booksService, PersonValidator personValidator, AdminService adminService, ModelMapper modelMapper) {
-        this.peopleService = peopleService;
-        this.booksService = booksService;
-        this.personValidator = personValidator;
-        this.adminService = adminService;
-        this.modelMapper = modelMapper;
-    }
+    PeopleService peopleService;
+    BooksService booksService;
+    PersonValidator personValidator;
+    AdminService adminService;
+    ModelMapper modelMapper;
 
     @GetMapping()
     public String index(Model model) {

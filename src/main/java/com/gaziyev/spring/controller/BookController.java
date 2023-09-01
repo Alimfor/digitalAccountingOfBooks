@@ -8,6 +8,9 @@ import com.gaziyev.spring.service.BooksService;
 import com.gaziyev.spring.service.PeopleService;
 import com.gaziyev.spring.util.BookValidator;
 import jakarta.validation.Valid;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,21 +21,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 @Controller
 @RequestMapping("/book")
 public class BookController {
-    private final BooksService booksService;
-    private final PeopleService peopleService;
-    private final BookValidator bookValidator;
-    private final ModelMapper modelMapper;
-
-    @Autowired
-    public BookController(BooksService booksService, PeopleService peopleService, BookValidator bookValidator, ModelMapper modelMapper) {
-        this.booksService = booksService;
-        this.peopleService = peopleService;
-        this.bookValidator = bookValidator;
-        this.modelMapper = modelMapper;
-    }
+    BooksService booksService;
+    PeopleService peopleService;
+    BookValidator bookValidator;
+    ModelMapper modelMapper;
 
     @GetMapping()
     public String index(Model model,

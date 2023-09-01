@@ -3,6 +3,9 @@ package com.gaziyev.spring.service;
 import com.gaziyev.spring.model.Book;
 import com.gaziyev.spring.model.Person;
 import com.gaziyev.spring.repository.PeopleRepository;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,17 +19,13 @@ import java.util.List;
 import java.util.Optional;
 
 
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 @Service
 @Transactional(readOnly = true)
 public class PeopleService {
-    private final PeopleRepository peopleRepository;
-    private final PasswordEncoder passwordEncoder;
-
-    @Autowired
-    public PeopleService(PeopleRepository peopleRepository, PasswordEncoder passwordEncoder) {
-        this.peopleRepository = peopleRepository;
-        this.passwordEncoder = passwordEncoder;
-    }
+    PeopleRepository peopleRepository;
+    PasswordEncoder passwordEncoder;
 
     public List<Person> findAll() {
         return peopleRepository.findAll();

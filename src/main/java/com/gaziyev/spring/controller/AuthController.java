@@ -5,6 +5,9 @@ import com.gaziyev.spring.model.Person;
 import com.gaziyev.spring.service.RegistrationService;
 import com.gaziyev.spring.util.PersonValidator;
 import jakarta.validation.Valid;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,21 +15,15 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
 
-    private final PersonValidator personValidator;
-    private final RegistrationService registrationService;
-    private final ModelMapper modelMapper;
-
-    @Autowired
-    public AuthController(PersonValidator personValidator, RegistrationService registrationService, ModelMapper modelMapper) {
-        this.personValidator = personValidator;
-        this.registrationService = registrationService;
-        this.modelMapper = modelMapper;
-    }
-
+    PersonValidator personValidator;
+    RegistrationService registrationService;
+    ModelMapper modelMapper;
 
     @GetMapping("/login")
     public String loginPage() {

@@ -2,22 +2,22 @@ package com.gaziyev.spring.service;
 
 import com.gaziyev.spring.model.Person;
 import com.gaziyev.spring.repository.AdminRepository;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 @Service
 @Transactional
 @PreAuthorize("hasRole('ROLE_ADMIN') || hasRole('ROLE_FIRST')")
 public class AdminService {
 
-    private final AdminRepository adminRepository;
-
-    @Autowired
-    public AdminService(AdminRepository adminRepository) {
-        this.adminRepository = adminRepository;
-    }
+    AdminRepository adminRepository;
 
     public void changeRole(Person person, String newRole) {
         person.setRole(newRole);

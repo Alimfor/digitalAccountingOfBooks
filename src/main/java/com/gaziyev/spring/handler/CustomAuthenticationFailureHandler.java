@@ -4,6 +4,10 @@ import com.gaziyev.spring.service.PersonDetailsService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
@@ -11,15 +15,12 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import java.io.IOException;
 import java.util.logging.Logger;
 
+@Slf4j
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 public class CustomAuthenticationFailureHandler implements AuthenticationFailureHandler {
-    private final PersonDetailsService personDetailsService;
-    private final PasswordEncoder passwordEncoder;
-    private static final Logger LOG = Logger.getLogger(String.valueOf(CustomAuthenticationFailureHandler.class));
-
-    public CustomAuthenticationFailureHandler(PersonDetailsService personDetailsService, PasswordEncoder passwordEncoder) {
-        this.personDetailsService = personDetailsService;
-        this.passwordEncoder = passwordEncoder;
-    }
+    PersonDetailsService personDetailsService;
+    PasswordEncoder passwordEncoder;
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
@@ -29,10 +30,10 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
 
         if ("LOCKED".equals(status)) {
             response.sendRedirect("/auth/login?locked");
-            LOG.warning("User: " + fullName + " is locked!");
+            log.info("User: " + fullName + " is locked!");
         } else if (!personDetailsService.isEnabled(fullName)) {
             response.sendRedirect("/auth/login?deleted");
-            LOG.warning("User: " + fullName + " is deleted!");
+            log.info("User: " + fullName + " is deleted!");
         } else if (!personDetailsService.isCorrectPassword(fullName,password,passwordEncoder)){
             response.sendRedirect("/auth/login?error");
         }

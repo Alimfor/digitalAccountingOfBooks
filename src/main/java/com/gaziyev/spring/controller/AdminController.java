@@ -4,6 +4,9 @@ import com.gaziyev.spring.security.PasswordComparison;
 import com.gaziyev.spring.security.PersonDetails;
 import com.gaziyev.spring.service.AdminService;
 import com.gaziyev.spring.util.PasswordValidator;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -11,18 +14,14 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
-    private final PasswordValidator passwordValidator;
-    private final PasswordComparison passwordComparison;
-    private final AdminService adminService;
-
-    public AdminController(PasswordValidator passwordValidator, PasswordComparison passwordComparison, AdminService adminService) {
-        this.passwordValidator = passwordValidator;
-        this.passwordComparison = passwordComparison;
-        this.adminService = adminService;
-    }
+    PasswordValidator passwordValidator;
+    PasswordComparison passwordComparison;
+    AdminService adminService;
 
     @GetMapping("/changeRole")
     public String changeUserRole(@ModelAttribute("comparison") PasswordComparison comparison) {

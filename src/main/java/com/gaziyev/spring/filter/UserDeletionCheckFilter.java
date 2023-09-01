@@ -6,6 +6,10 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,15 +21,12 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+@Slf4j
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE,makeFinal = true)
 @Component
 public class UserDeletionCheckFilter extends OncePerRequestFilter {
-    private final PersonDetailsService personDetailsService;
-    private static final Logger LOG = Logger.getLogger(String.valueOf(UserDeletionCheckFilter.class));
-
-    @Autowired
-    public UserDeletionCheckFilter(PersonDetailsService personDetailsService) {
-        this.personDetailsService = personDetailsService;
-    }
+    PersonDetailsService personDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -40,7 +41,7 @@ public class UserDeletionCheckFilter extends OncePerRequestFilter {
                     new SecurityContextLogoutHandler().logout(request, response, authentication);
                     response.sendRedirect("/auth/login?deleted");
 
-                    LOG.warning("User: " + userDetails.getUsername()
+                    log.info("User: " + userDetails.getUsername()
                             + " has been deleted!");
                     return;
                 }
@@ -50,7 +51,7 @@ public class UserDeletionCheckFilter extends OncePerRequestFilter {
                     new SecurityContextLogoutHandler().logout(request, response, authentication);
                     response.sendRedirect("/auth/login?locked");
 
-                    LOG.warning("User: " + userDetails.getUsername()
+                    log.info("User: " + userDetails.getUsername()
                             + " has been locked!");
                     return;
                 }
