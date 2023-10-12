@@ -3,6 +3,7 @@ package com.gaziyev.spring.controller;
 import com.gaziyev.spring.security.PasswordComparison;
 import com.gaziyev.spring.security.PersonDetails;
 import com.gaziyev.spring.service.AdminService;
+import com.gaziyev.spring.service.PeopleService;
 import com.gaziyev.spring.util.PasswordValidator;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -22,14 +23,19 @@ public class AdminController {
     PasswordValidator passwordValidator;
     PasswordComparison passwordComparison;
     AdminService adminService;
+    PeopleService peopleService;
 
     @GetMapping("/changeRole")
-    public String changeUserRole(@ModelAttribute("comparison") PasswordComparison comparison) {
+    public String changeUserRole(@ModelAttribute("comparison") PasswordComparison comparison,
+                                 @RequestParam("personId") Integer personId,
+                                 Model model) {
+        model.addAttribute("personId",personId);
         return "admin/changeRole";
     }
 
     @GetMapping("/check")
     public String checkingPassword(@ModelAttribute("comparison") PasswordComparison actualPassword,
+                                   @RequestParam("personId") Integer personId,
                                    BindingResult bindingResult, Model model) {
         passwordComparison.setActualPassword(actualPassword.getActualPassword());
         passwordValidator.validate(passwordComparison, bindingResult);
@@ -40,17 +46,22 @@ public class AdminController {
         }
 
         model.addAttribute("validPassword", true);
+        model.addAttribute("personId",personId);
         return "admin/changeRole";
     }
 
     @PatchMapping("/changeRole")
-    public String updateRole(@RequestParam String newRole) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
+    public String updateRole(@RequestParam String newRole,
+                             @RequestParam("personId") Integer personId) {
+        if (personId == null) {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            PersonDetails personDetails = (PersonDetails) authentication.getPrincipal();
+            adminService.changeRole(personDetails.person(),newRole);
+            return "redirect:/auth/login";
+        }
 
-        adminService.changeRole(personDetails.person(),newRole);
-
-        return "redirect:/auth/login";
+        adminService.changeRole(peopleService.findOne(personId),newRole);
+        return "redirect:/people/" + personId;
     }
 
     @GetMapping("/categories")

@@ -19,6 +19,7 @@ public class AdminService {
 
     AdminRepository adminRepository;
 
+
     public void changeRole(Person person, String newRole) {
         person.setRole(newRole);
         adminRepository.save(person);

@@ -42,6 +42,12 @@
 <br/>
 <hr/>
 
+<form th:method="GET" th:action="@{/admin/changeRole}">
+    <input type="hidden" name="personId" th:value="${person.getId()}">
+    <input type="submit" value="Изменить роль">
+</form>
+<br/>
+
 <div th:if="${!person.isLocked()}">
     <form th:method="PATCH" th:action="@{/people/{id}/lock(id = ${person.getId()})}">
         <input type="submit" value="Заблокировать">
